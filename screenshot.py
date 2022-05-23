@@ -1,5 +1,6 @@
-
+import pyautogui
+import datetime
 
 class Screenshoot():
     def __init__(self):
-        print("hello woreld")
+        pyautogui.screenshot(f'{datetime.datetime.now()}.png')
