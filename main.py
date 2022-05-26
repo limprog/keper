@@ -1,12 +1,9 @@
 from screenshot import *
-def main_loop():
-    pass
-def init():
-    pass
 
 
 if __name__ == '__main__':
-    scrin  = Screenshoot()
-    init()
-    main_loop()
+    screenshot_maker = Screenshoot()
+    while True:
+        screenshot_maker.screen()
+        time.sleep(10)
 
