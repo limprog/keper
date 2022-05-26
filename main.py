@@ -1,9 +1,12 @@
 from screenshot import *
-
+import argparse
 
 if __name__ == '__main__':
     screenshot_maker = Screenshoot()
-    while True:
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('--scr', default=5, type=int, help='Number of screenshots')
+    args = parser.parse_args()
+    for i in range(args.scr):
         screenshot_maker.screen()
-        time.sleep(10)
+        time.sleep(5)
 
