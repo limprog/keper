@@ -1,24 +1,24 @@
 import os
 from constants import *
-def check(prg, list, cod, ren):
+def check(prg, list, cod, ren,der):
     if prg == cod:
         prog = 1
         if list == 1:
-            list_print()
+            list_print(der=der)
         if ren == 1:
-            rename()
+            rename(der=der)
     else:
         prog = 0
     return prog
 
 
-def list_print():
-    fils = os.listdir(f'Screenshoot\{today}')
+def list_print(der):
+    fils = os.listdir(f'Screenshoot\{der}')
     print(' '.join(fils))
 
 
-def rename():
-    fils = os.listdir(f'Screenshoot\{today}')
+def rename(der):
+    fils = os.listdir(f'Screenshoot\{der}')
     for i in range(len(fils)):
         name = '{0}.png'.format(i+1)
-        os.rename(os.path.join(f'Screenshoot\{today}',fils[i]), os.path.join(f'Screenshoot\{today}', name))
+        os.rename(os.path.join(f'Screenshoot\{der}',fils[i]), os.path.join(f'Screenshoot\{der}', name))
