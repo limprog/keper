@@ -18,15 +18,18 @@ if __name__ == '__main__':
     parser.add_argument('--ren', default=0, type=int, help='rename files by sequence')
     parser.add_argument('--sve', default=1, type=int, help='save arguments or not')
     parser.add_argument('--der', default=today, type=str)
+    parser.add_argument('--renr', default=0, type=int)
     args = parser.parse_args()
     screenshot_maker = Screenshoot(der=args.der)
     writef(args.sve, args.scr, args.tscr, args.var, args.cod)
     min = args.tscr - args.var
     max = args.tscr + args.var
-    prog, cod = check(prg=args.prg,cod=cod, cod2=args.cod, list=args.list, ren=args.ren, der=args.der)
+    prog = check(prg=args.prg, cod2=args.cod, list=args.list, ren=args.ren, der=args.der, renr=args.renr)
     writef(args.sve, args.scr, args.tscr, args.var, args.cod)
-    if prog != 1:
+    if prog == 0:
         for i in range(args.scr):
             screenshot_maker.screen(args.der)
             time.sleep(random.randint(min, max))
+    else:
+        pass
 
