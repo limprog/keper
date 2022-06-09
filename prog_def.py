@@ -1,8 +1,9 @@
 import os
 import random
-
+from marcer import *
 from constants import *
-def check(prg, list, cod2, ren,der, renr):
+def check(prg, list, cod2, ren,der, renr, mar):
+    print(prg, cod2)
     if prg == cod2:
         prog = 1
         if list == 1:
@@ -11,9 +12,11 @@ def check(prg, list, cod2, ren,der, renr):
             rename(der=der)
         if renr == 1:
             renamerandoom(der)
+        if mar == 1:
+            app = App()
     else:
         prog = 0
-    return prog,
+    return prog
 
 
 def list_print(der):

@@ -11,7 +11,7 @@ class App:
         # создаем рабочую область
         self.frame = tk.Frame(self.root)
         self.frame.grid()
-        self.image = Image.open(r"C:\Users\Kriper\PycharmProjects\keper\Screenshoot\data\1000.jpg")
+        self.image = Image.open(r"C:\Users\Kriper\PycharmProjects\keper\Screenshoot\data\HI.png")
         width, height = self.image.size
         new_width = 1000  # ширина
         new_height = int(new_width * height / width)
@@ -26,10 +26,12 @@ class App:
         self.but1 = tk.Button(self.frame, text="0 - плохо", width=50, command=self.bad_z)
         self.but2 = tk.Button(self.frame, text="1 - норм", width=50, command=self.normal_z)
         self.but3 = tk.Button(self.frame, text='2 - хорошо', width=50, command=self.good_z)
+        self.but4 = tk.Button(self.frame, text='сохранить', width=50, command=self.sev )
         self.but1.grid(row=3, column=1)
         self.but2.grid(row=4, column=1)
         self.but3.grid(row=5, column=1)
-        e = {"files":['1000.png'], "bad": [0], "normal":[0],"good":[0]}
+        self.but4.grid(row=6, column=1)
+        e = {"files":['HI.png'], "bad": [0], "normal":[0],"good":[0]}
         self.data = pd.DataFrame(e)
         # Добавим изображение
         self.canvas = tk.Canvas(self.root, height=1080, width=1920)
@@ -71,4 +73,5 @@ class App:
         self.data = pd.concat([self.data, dataf], axis=0)
         print(self.data.head())
 
-app = App()
+    def sev(self):
+        self.data.to_csv("data")
