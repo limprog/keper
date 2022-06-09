@@ -9,7 +9,7 @@ data.execute("""CREATE TABLE IF NOT EXISTS users(
    userid INT PRIMARY KEY,
    fname TEXT,
    sname TEXT,
-   cod TEXT.
+   cod TEXT,
    gender TEXT,
    age INT);
 """)
@@ -36,5 +36,7 @@ data.execute("""CREATE TABLE IF NOT EXISTS chairman(
     FOREIGN KEY (userid) REFERENCES users(userid),
     FOREIGN KEY (classid) REFERENCES class(classid));
 """)
+data.execute("SELECT * FROM users;")
+print(data.fetchall())
 df.commit()
 
