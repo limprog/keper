@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, url_for, flash, redirect
 import sqlite3
+import os
+
 
 def get_db_connection():
-    conn = sqlite3.connect(r'databas/database.db')
+    conn = sqlite3.connect(os.path.join('database.db'))
     conn.row_factory = sqlite3.Row
+    flash("чего-го не хватает")
     return conn
 def reg_write():
     pass
@@ -17,7 +20,8 @@ def index():
 @app.route('/reg',  methods=('GET', 'POST'))
 def reg():
     if request.method == 'POST':
-        fname = request.form['fname']
+        flash("ij")
+        fname = str(request.form['fname'])
         if not fname:
             flash("чего-го не хватает")
         else:
@@ -26,11 +30,10 @@ def reg():
                          (fname))
             conn.commit()
             conn.execute("SELECT * FROM users;")
-            conn.fetchall()
+            print(conn.fetchall())
             conn.close()
-            return redirect(url_for('index'))
 
-    return render_template('reg.html'),
+    return render_template('reg.html')
 
 
 if __name__ == '__main__':
