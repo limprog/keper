@@ -7,14 +7,40 @@
 </head>
 <body>
     <div class="topnav">
-        <a class="navigation" href="#">Привет</a>
+        <a class="navigation" href="/auth">Войти</a>
     </div>
-    <form>
-        <label class="font2">Ведите Ваше имя</label><br>
-        <input type="text"
-               placeholder="ваше имя" class="texti1"
-               >"{{request.form['fname'] }}"</input>
-        <button type="submit">Submit</button>
-    </form>
+    <div class="container-from1">
+        <p class="font2">Для регbстрации заполните эту форму</p>
+        <form method="post" class="from1">
+            <div>
+                <label >Введите Ваше имя</label><br>
+                <input type="text" name="fname"
+                       placeholder="Ваше имя" class="texti1"
+                       value="{{ request.form['fname'] }}"
+                />
+            </div>
+            <div>
+                <label>Введите Ваш логин</label><br>
+                <input type="text" name="sname"
+                       placeholder="Ваш логин"
+                       class="texti1" value="{{ request.form['sname'] }}"/>
+            </div>
+            <div>
+                <label>Введите пароль</label><br>
+                <input type="password" name="cod"
+                placeholder="Придумайте пароль"
+                class="texti1" value="{{ request.form['cod'] }}"/>
+            </div>
+            <div>
+                <label>Введите ваш email</label><br>
+                <input type="email" name="email"
+                placeholder="Введите ваш email"
+                class="texti1" value="{{ request.form['email'] }}"/>
+            </div>
+
+            <button type="submit" class="from1-button">Отправить форму</button>
+        </form>
+    </div>
+
 </body>
 </html>

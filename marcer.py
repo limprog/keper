@@ -11,7 +11,7 @@ class App:
         # создаем рабочую область
         self.frame = tk.Frame(self.root)
         self.frame.grid()
-        self.image = Image.open(r"C:\Users\Kriper\PycharmProjects\keper\Screenshoot\data\HI.png")
+        self.image = Image.open(r"/web/templates/HI.png")
         width, height = self.image.size
         new_width = 1000  # ширина
         new_height = int(new_width * height / width)

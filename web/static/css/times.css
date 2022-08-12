@@ -9,10 +9,43 @@
     font-size: 25px;
 }
 .font2{
-     font-family: "Comic Sans MS", sans-serif;
+    font-family: "Comic Sans MS", sans-serif;
     color: blue;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 25px;
+}
+.from1{
+    font-family: "Comic Sans MS", sans-serif;
+    color: blue;
+    text-decoration: none;
+    font-size: 25px;
+
+}
+.container-from1 {
+    margin-left: auto;
+    margin-right: auto;
+    width: 250px;
+}
+.from1-button{
+  border: 0;
+  background: #C2F56E;
+  color: #A63E00;
+  padding: 8px 16px;
+  font-size: 16px;
+  border-radius:8px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 200px;
+  font-family: "Comic Sans MS", sans-serif;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.from1-button:hover{
+  background: #5F9900;
+  outline-style: solid;
+  outline-width: 3px;
+  outline-color: #bbbbbb;
+
 }
 .topnav {
     background-color: #CFCFCF;
@@ -24,18 +57,18 @@
     padding: 14px 16px;
     text-decoration: none;
     color: black;
-    font-size: 20px;
+    font-size: 18px;
+    font-family: "Comic Sans MS", sans-serif;
 }
 .navigation-reg{
     background-color: #00CF00;
     border-radius:8px;
 }
-.radio{
-    margin-bottom: 10px;
-}
+
 .texti1{
     border-color: blue;
     border-radius:8px;
     padding: 14px 16px;
 }
+
 

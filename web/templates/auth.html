@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Автвризуйтесь</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/times.css') }}">
+</head>
+<body>
+    <div class="topnav">
+        <a class="navigation navigation-reg" href="/reg">Регистрация</a>
+    </div>
+    <div class="container-from1">
+        <form method="post" class="from1">
+            <div>
+                <label>Введите свой email</label><br>
+                <input type="email" name="emaila"
+                       placeholder="Введите свой email" class="texti1"
+                       value="{{ request.form['emaila'] }}"/>
+            </div>
+            <div>
+                <label>Введите пароль</label><br>
+                <input type="password" name="cod"
+                       placeholder="Введите  пароль" class="texti1"
+                       value="{{ request.form['cod'] }}"/>
+            </div>
+            <button type="submit" class="from1-button">Отправить форму</button>
+        </form>
+
+    </div>
+</body>
+</html>
