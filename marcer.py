@@ -11,7 +11,7 @@ class App:
         # создаем рабочую область
         self.frame = tk.Frame(self.root)
         self.frame.grid()
-        self.image = Image.open(r"/web/templates/HI.png")
+        self.image = Image.open(r"./Screenshoot/data/HI.png")
         width, height = self.image.size
         new_width = 1000  # ширина
         new_height = int(new_width * height / width)
@@ -43,9 +43,9 @@ class App:
 
 
     def my_event_handler(self):
-        fils = os.listdir('Screenshoot\data')
+        fils = os.listdir('./Screenshoot/data')
         self.f = '{0}.png'.format(self.a + 1)
-        self.image = Image.open(f"Screenshoot\data\{self.f}")
+        self.image = Image.open(f"./Screenshoot/data/{self.f}")
         self.a += 1
         width, height = self.image.size
         new_width = 1000  # ширина

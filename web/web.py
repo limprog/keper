@@ -11,7 +11,7 @@ def reg_write():
     pass
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your secret key'
+app.config['SECRET_KEY'] = '1234'
 
 @app.route('/')
 def index():
