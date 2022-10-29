@@ -13,27 +13,27 @@ data.execute("""CREATE TABLE IF NOT EXISTS users(
    );
 """)
 data.execute("""CREATE TABLE IF NOT EXISTS class(
-   classid INT PRIMARY KEY AUTOINCREMENT NOT NULL,
+   classid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    name TEXT,
    cod TEXT,
    grop TEXT,
-   chairmanid INT,
+   chairmanid INTEGER,
    FOREIGN KEY (chairmanid) REFERENCES chairman(chairman));
 """)
 
 df.commit()
 data = df.cursor()
 data.execute("""CREATE TABLE IF NOT EXISTS users_class(
-    id INT  PRIMARY KEY,
-    userid INT,
-    classid INT,
+    id INTEGER  PRIMARY KEY,
+    userid INTEGER,
+    classid INTEGER,
     FOREIGN KEY (userid) REFERENCES users(userid),
     FOREIGN KEY (classid) REFERENCES class(classid));
 """)
-data.execute("""CREATE TABLE IF NOT EXISTS chairman(
-    chairmanid INT PRIMARY KEY,
-    userid INT,
-    classid INT,
+data.execute("""CREATE TABLE IF NOT EXISTS chairman(INT
+    chairmanid INTEGER PRIMARY KEY,
+    userid INTEGER,
+    classid INTEGER,
     FOREIGN KEY (userid) REFERENCES users(userid),
     FOREIGN KEY (classid) REFERENCES class(classid));
 """)

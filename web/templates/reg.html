@@ -9,14 +9,32 @@
     <div class="topnav">
         <a class="navigation" href="/auth">Войти</a>
     </div>
+    <div class = "error1 error1-font1">
+        {% if not request.form["fname"] %}
+            <p>Заполните имя</p>
+        {% elif not request.form["sname"] %}
+            <p>Заполните псевдоним</p>
+        {% elif not request.form["email"] %}
+            <p>Заполните емаил</p>
+        {% elif not request.form["cod"] %}
+            <p>Заполнике пароль</p>
+        {% endif %}
+    </div>
     <div class="container-from1">
-        <p class="font2">Для регbстрации заполните эту форму</p>
+        <p class="font2">Для регистрации заполните эту форму</p>
         <form method="post" class="from1">
             <div>
                 <label >Введите Ваше имя</label><br>
                 <input type="text" name="fname"
                        placeholder="Ваше имя" class="texti1"
                        value="{{ request.form['fname'] }}"/>
+            {#
+                {% if request.form["fname"] %}
+                    <p>Молодец</p>
+                {% else %}
+                    <p>Ты гавноедина</p>
+                {% endif %}
+            #}
             </div>
             <div>
                 <label>Введите Ваш логин</label><br>
@@ -38,6 +56,8 @@
             </div>
 
             <button type="submit" class="from1-button">Отправить форму</button>
+
+
         </form>
     </div>
 
