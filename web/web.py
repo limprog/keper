@@ -19,16 +19,15 @@ def index():
 
 @app.route('/reg',  methods=('GET', 'POST'))
 def reg():
+    test = 0
     if request.method == 'POST':
-        #flash("ij")
-
         fname = str(request.form['fname'])
         sname = str(request.form['sname'])
         cod = str(request.form['cod'])
         email = str(request.form['email'])
 
         if not fname or not sname or not cod or not email:
-            flash("ddddddddddd")
+            test = 1
         else:
             conn = get_db_connection()
             conn.execute('INSERT INTO users (fname, sname, cod, email) VALUES (?, ?, ?, ?)',
@@ -37,23 +36,26 @@ def reg():
             conn.execute("SELECT * FROM users;")
             conn.close()
 
-    return render_template('reg.html')
+    return render_template('reg.html', test=test)
 
 @app.route('/auth',  methods=('GET', 'POST'))
 def auth():
+    test = 0
+    authenticity = 2
     if request.method == 'POST':
         email = str(request.form['emaila'])
         cod = str(request.form['cod'])
         if not email or not cod:
-            pass
+            test = 1
         else:
             conn = get_db_connection()
             cur = conn.cursor()
             cur.execute("SELECT * FROM users where email = (?)",(email,))
             row = cur.fetchone()
+            print(row['cod'])
             rcod = row['cod']
             if cod == rcod:
-                pass
-    return render_template('auth.html')
+                authenticity = 1
+    return render_template('auth.html', authenticity=authenticity)
 if __name__ == '__main__':
     app.run()
