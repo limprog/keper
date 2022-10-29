@@ -9,16 +9,15 @@
     <div class="topnav">
         <a class="navigation" href="/auth">Войти</a>
     </div>
-
-        {% if not request.form["fname"] and test  == 1 %}
-            <h2 class = "error1 error1-font1">Заполните имя</h2>
-        {% elif not request.form["sname"] and test  == 1  %}
-            <h2 class = "error1 error1-font1">Заполните псевдоним</h2>
-        {% elif not request.form["email"] and test  == 1  %}
-            <h2 class = "error1 error1-font1">Заполните емаил</h2>
-        {% elif not request.form["cod"] and test  == 1 %}
-            <h2 class = "error1 error1-font1">Заполнике пароль</h2>
-        {% endif %}
+    {% if not request.form["fname"] and test  == 1 %}
+        <h2 class = "error1 error1-font1">Заполните имя</h2>
+    {% elif not request.form["sname"] and test  == 1  %}
+        <h2 class = "error1 error1-font1">Заполните псевдоним</h2>
+    {% elif not request.form["email"] and test  == 1  %}
+        <h2 class = "error1 error1-font1">Заполните емаил</h2>
+    {% elif not request.form["cod"] and test  == 1 %}
+        <h2 class = "error1 error1-font1">Заполнике пароль</h2>
+    {% endif %}
     <div class="container-from1">
         <p class="font2">Для регистрации заполните эту форму</p>
         <form method="post" class="from1">
@@ -55,8 +54,8 @@
             </div>
 
             <button type="submit" class="from1-button">Отправить форму</button>
-
-
+            <br>
+            <a href="/head">Главная страница</a>
         </form>
     </div>
 

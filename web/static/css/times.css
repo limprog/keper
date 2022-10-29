@@ -22,6 +22,7 @@
 
 }
 .container-from1 {
+    text-align: center;
     margin-left: auto;
     margin-right: auto;
     width: 250px;
@@ -84,4 +85,19 @@
     font-size: 22px;
     color: #8b0000;
 }
-
+.login1 {
+    background-color: #CFCFCF;
+    overflow: hidden;
+}
+.login1 h1{
+    float: contour;
+    text-align: center;
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    font-family: "Comic Sans MS", sans-serif;
+}
+a{
+    text-decoration: none;
+    color: black;
+}

@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, url_for, flash, redirect
 import sqlite3
 import os
 
-
+fnamea =0
 def get_db_connection():
     conn = sqlite3.connect(os.path.join('database/database.db'))
     conn.row_factory = sqlite3.Row
@@ -35,6 +35,8 @@ def reg():
             conn.commit()
             conn.execute("SELECT * FROM users;")
             conn.close()
+            fnamea = fname
+            print(fnamea)
 
     return render_template('reg.html', test=test)
 
@@ -54,8 +56,18 @@ def auth():
             row = cur.fetchone()
             print(row['cod'])
             rcod = row['cod']
+            fname = row['fname']
+            fnamea = fname
             if cod == rcod:
                 authenticity = 1
-    return render_template('auth.html', authenticity=authenticity)
+            else:
+                test = 1
+                authenticity = 0
+                print(authenticity)
+    return render_template('auth.html', authenticity=authenticity, test = test)
+
+@app.route('/head')
+def head():
+    return render_template('head.html', fname=fnamea)
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=False)
