@@ -70,4 +70,4 @@ def auth():
 def head():
     return render_template('head.html', fname=fnamea)
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
