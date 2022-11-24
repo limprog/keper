@@ -64,7 +64,10 @@ def auth():
                 test = 1
                 authenticity = 0
                 print(authenticity)
-    return render_template('auth.html', authenticity=authenticity, test = test)
+    if authenticity == 1:
+        return render_template('head.html', fname=fname )
+    else:
+        return render_template('auth.html', authenticity=authenticity, test = test)
 
 @app.route('/head')
 def head():
