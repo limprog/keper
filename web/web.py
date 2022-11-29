@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, url_for, flash, redirect
+from flask import Flask, render_template, session, request,  redirect, url_for, flash
+import datetime
 import sqlite3
 import os
 
@@ -10,8 +11,12 @@ def get_db_connection():
 def reg_write():
     pass
 
+# Устоновка значений
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '1234'
+app.permanent_session_lifetime = datetime.timedelta(days=365*2)
+
+
 
 @app.route('/')
 def index():
@@ -55,22 +60,22 @@ def auth():
             cur.execute("SELECT * FROM users where email = (?)",(email,))
             row = cur.fetchone()
             print(row['cod'])
+            print(cod)
             rcod = row['cod']
             fname = row['fname']
-            fnamea = fname
             if cod == rcod:
                 authenticity = 1
+                session['fname'] = fname
+                print(session.get('fname'))
             else:
                 test = 1
                 authenticity = 0
                 print(authenticity)
-    if authenticity == 1:
-        return render_template('head.html', fname=fname )
-    else:
-        return render_template('auth.html', authenticity=authenticity, test = test)
+    return render_template('auth.html', authenticity=authenticity, test=test)
 
-@app.route('/head')
+
+@app.route('/head',   methods=('GET', 'POST'))
 def head():
-    return render_template('head.html', fname=fnamea)
+    return render_template('head.html', fname=session.get('fname'))
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
