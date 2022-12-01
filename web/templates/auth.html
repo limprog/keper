@@ -18,11 +18,13 @@
         <h2 class = "error1 error1-font1">Пароль неверный</h2>
     {% endif %}
     <div class="container-from1">
+        <p class="font2">Для аунтефикацию заполните эту форму</p>
         <form method="post" class="from1" >
             <div>
                 <label>Введите свой email</label><br>
                 <input type="email" name="emaila"
-                       placeholder="Введите свой email" class="texti1"
+                       placeholder="Введите свой emai
+                       l" class="texti1"
                        value="{{ request.form['emaila'] }}"/>
             </div>
             <div>
@@ -32,8 +34,8 @@
                        value="{{ request.form['cod'] }}"/>
             </div>
             <button type="submit" class="from1-button" href="/reg">Отправить форму</button>
+            <a href="/head">Главная страница</a>
         </form>
-
     </div>
 </body>
 </html>

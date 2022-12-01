@@ -8,7 +8,25 @@
 </head>
 <body>
     <div class = login1>
-        <h1 class = login1>{{ fname }} </h1>
+        <h1 class = login1>{{fname}} </h1>
     </div>
+    <div class="font1 head">
+        {% if not classes %}
+            <h3>Много работы? Cоздай класс</h3>
+            <p class="font3">Не хотите модерировать всех по одному? Cоздаете класс</p>
+            <p class="font3">Уже есть класс войдите</p>
+        {% else %}
+            <h3>Вот все ваши классы</h3>
+            {% for i in classes %}
+                <a class="font3">{{ i }}</a>
+            {% endfor %}
+        {% endif %}
+        <br>
+        <a class="font3-a" href="/class/reg">Cоздаеть класс</a>
+        <br>
+        <a class="font3-a" href="/class/auth">Войти в класс</a>
+    </div>
+    <a class="font3" href="/exit">Выйти<a>
+
 </body>
 </html>

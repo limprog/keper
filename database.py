@@ -17,8 +17,8 @@ data.execute("""CREATE TABLE IF NOT EXISTS class(
    name TEXT,
    cod TEXT,
    grop TEXT,
-   chairmanid INTEGER,
-   FOREIGN KEY (chairmanid) REFERENCES chairman(chairman));
+   email TEXT,
+   chairmanid INTEGER);
 """)
 
 df.commit()
@@ -30,15 +30,12 @@ data.execute("""CREATE TABLE IF NOT EXISTS users_class(
     FOREIGN KEY (userid) REFERENCES users(userid),
     FOREIGN KEY (classid) REFERENCES class(classid));
 """)
-data.execute("""CREATE TABLE IF NOT EXISTS chairman(INT
-    chairmanid INTEGER PRIMARY KEY,
-    userid INTEGER,
-    classid INTEGER,
-    FOREIGN KEY (userid) REFERENCES users(userid),
-    FOREIGN KEY (classid) REFERENCES class(classid));
-""")
+
 data.execute("SELECT * FROM users;")
-print(data.fetchall())
+print(data.fetchall(), 'users')
+data.execute("SELECT * FROM class")
+print(data.fetchall(), 'class')
+
 print(os.path.join('database.py'))
 df.commit()
 df.close()

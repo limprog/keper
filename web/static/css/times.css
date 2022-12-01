@@ -14,6 +14,21 @@
     text-decoration: none;
     font-size: 25px;
 }
+.font3{
+    font-family: "Comic Sans MS", sans-serif;
+    color: black;
+    text-decoration: none;
+    padding: 0px;
+    margin-bottom: 0px;
+    font-size: 20px;
+
+}
+.font3-a{
+    font-family: "Comic Sans MS", sans-serif;
+    color: black;
+    text-decoration: underline;
+    font-size: 20px
+}
 .from1{
     font-family: "Comic Sans MS", sans-serif;
     color: blue;
@@ -96,6 +111,11 @@
     color: black;
     font-size: 18px;
     font-family: "Comic Sans MS", sans-serif;
+}
+.head{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 a{
     text-decoration: none;

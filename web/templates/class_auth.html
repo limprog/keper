@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Аунтофекация класса</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/times.css') }}">
+</head>
+<body>
+
+   <div class="container-from1">
+       <p class="font2">Для аунтуфикации класса заполните эту форму</p>
+        <form method="post" class="from1" >
+            <div>
+                <label>Введите название класса</label><br>
+                <input type="text" name="classname"
+                       placeholder="Введите название класса" class="texti1"
+                       value="{{ request.form['classname'] }}"/>
+            </div>
+            <div>
+                <label>Введите пароль</label><br>
+                <input type="password" name="cod"
+                       placeholder="Введите  пароль" class="texti1"
+                       value="{{ request.form['cod'] }}"/>
+            </div>
+            <button type="submit" class="from1-button" href="/reg">Отправить форму</button>
+            <a href="/head">Главная страница</a>
+        </form>
+    </div>
+</body>
+</html>

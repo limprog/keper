@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'css/times.css') }}">
+    <title>Регистрация класса</title>
+</head>
+<body>
+     <div class="container-from1">
+        <p class="font2">Для регистрации класса заполните эту форму</p>
+        <form method="post" class="from1">
+            <div>
+                <label >Введите название класса</label><br>
+                <input type="text" name="name"
+                       placeholder="Имя класса" class="texti1"
+                       value="{{ request.form['name'] }}"/>
+            </div>
+            <div>
+                <label>Пароль от класса</label><br>
+                <input type="password" name="cod"
+                       placeholder="Придумайте пароль"
+                       class="texti1" value="{{ request.form['cod'] }}"/>
+            </div>
+            <div>
+                <label>Введите группу</label><br>
+                <input type="text" name="grop"
+                placeholder="Введите группу"
+                class="texti1" value="{{ request.form['grop'] }}"/>
+            </div>
+            <div>
+                <label>Введите ваш email</label><br>
+                <input type="email" name="email"
+                placeholder="Введите ваш email"
+                class="texti1" value="{{ request.form['email'] }}"/>
+            </div>
+
+            <button type="submit" class="from1-button">Отправить форму</button>
+            <br>
+            <a href="/head">Главная страница</a>
+        </form>
+    </div>
+</body>
+</html>
