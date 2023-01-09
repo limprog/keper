@@ -16,6 +16,7 @@ data.execute("""CREATE TABLE IF NOT EXISTS class(
    classid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    name TEXT,
    cod TEXT,
+   
    grop TEXT,
    email TEXT,
    chairmanid INTEGER);

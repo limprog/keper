@@ -10,6 +10,7 @@ def readf():
     else:
         scr, tscr, var, cod = list(map(int, f.readlines()))
 
+
     f.close()
     return scr, tscr, var, cod
 
