@@ -6,7 +6,7 @@ import os
 
 fnamea =0
 def get_db_connection():
-    conn = sqlite3.connect(os.path.join('database/database.db'))
+    conn = sqlite3.connect(os.path.join('../database/database.db'))
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -66,6 +66,7 @@ def auth():
         else:
             conn = get_db_connection()
             cur = conn.cursor()
+            # добавить проверку на существование
             cur.execute("SELECT * FROM users where email = (?)",(email,))
             row = cur.fetchone()
             print(row['cod'])

@@ -1,22 +1,21 @@
 import sqlite3
 import os
 
-os.makedirs(os.path.join('web',"database"), exist_ok=True)
-df = sqlite3.connect(os.path.join("web/database/database.db"))
+os.makedirs(os.path.join("database"), exist_ok=True)
+df = sqlite3.connect(os.path.join("database/database.db"))
 data = df.cursor()
 data.execute("""CREATE TABLE IF NOT EXISTS users(
    userid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    fname TEXT,
    sname TEXT,
    cod TEXT, 
-   email TEXT
-   );
+   email TEXT,
+   tgid TETX);
 """)
 data.execute("""CREATE TABLE IF NOT EXISTS class(
    classid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    name TEXT,
    cod TEXT,
-   
    grop TEXT,
    email TEXT,
    chairmanid INTEGER);

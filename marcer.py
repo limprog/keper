@@ -75,3 +75,7 @@ class App:
 
     def sev(self):
         self.data.to_csv("data")
+
+
+
+app = App()
