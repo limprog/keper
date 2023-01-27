@@ -5,7 +5,7 @@ import time
 
 def img():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # AF_INET = IP, SOCK_STREAM = TCP
-    server.bind(('localhost', 4344))  # 127.0.0.1
+    server.bind(('13.228.225.19', 4344))  # 127.0.0.1
     server.listen()
     print("ing")
     while True:

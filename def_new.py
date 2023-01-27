@@ -32,4 +32,7 @@ def reg(reg):
         time_2 = input("дни недели (англ сокращение)\n>>>").upper()
         time_t = time_1, time_2
         so_id = input("id кружка")
+        with open("comp.txt", access_mode="w") as f:
+            f.write(time_t)
         reg_cl(time_t,so_id)
+
