@@ -21,9 +21,11 @@ if __name__ == '__main__':
     parser.add_argument('--der', default=today, type=str)
     parser.add_argument('--renr', default=0, type=int)
     parser.add_argument('--mar', default=0, type=int)
+    parser.add_argument('--reg', default=0, type=int)
     args = parser.parse_args()
     screenshot_maker = Screenshoot(der=args.der)
     writef(args.sve, args.scr, args.tscr, args.var, args.cod)
+    reg(args.reg)
     min = args.tscr - args.var
     max = args.tscr + args.var
     prog = check(prg=args.prg, cod2=args.cod, list=args.list, ren=args.ren, der=args.der, renr=args.renr, mar=args.mar)
