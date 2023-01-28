@@ -16,10 +16,13 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-
+from flask import Flask, render_template, session, request,  redirect, url_for, flash
 import sqlite3
 import os
 from states import *
+import requests
+import asyncio
+
 
 
 def get_db_connection():
@@ -28,6 +31,8 @@ def get_db_connection():
     cur = conn.cursor()
     return conn, cur
 
+
+app = Flask(__name__)
 storage = MemoryStorage()
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot, storage=storage)
@@ -35,6 +40,12 @@ logging.basicConfig(level=logging.INFO)
 states = States()
 reg = {}
 
+
+@app.route('/test', methods=['POST'])
+def get_test():
+    data = request.get_json()
+    print(data)
+    return ("ok")
 
 
 @dp.message_handler(commands=['start'])
@@ -226,5 +237,9 @@ async def comand_akk(message: types.Message):
     reg = {}
 
 
+
+async def on_startup(x):
+    asyncio.create_task(asyncio.to_thread(app.run))
+
 if __name__ == '__main__':
-    executor.start_polling(dp)
+    executor.start_polling(dispatcher=dp, skip_updates=True, on_startup=on_startup)
