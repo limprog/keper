@@ -1,8 +1,7 @@
 import sqlite3
 import os
 
-os.makedirs(os.path.join("database"), exist_ok=True)
-df = sqlite3.connect(os.path.join("database/database.db"))
+df = sqlite3.connect(os.path.join("database.db"))
 data = df.cursor()
 data.execute("""CREATE TABLE IF NOT EXISTS users(
    userid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

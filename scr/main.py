@@ -1,9 +1,9 @@
 
-from screenshot import *
+from scr.screenshot import *
 import argparse
 from prog_def import *
 import time
-from def_new import *
+from scr.def_new import *
 
 if __name__ == '__main__':
     #f = open('consig.txt', 'w')

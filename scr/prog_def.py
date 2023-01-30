@@ -1,8 +1,7 @@
-
-import os
 import random
-from marcer import *
-from constants import *
+from scr.marker import *
+
+
 def check(prg, list, cod2, ren,der, renr, mar):
     print(prg, cod2)
     if prg == cod2:
