@@ -3,38 +3,49 @@ import os
 
 df = sqlite3.connect(os.path.join("database.db"))
 data = df.cursor()
-data.execute("""CREATE TABLE IF NOT EXISTS users(
-   userid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-   fname TEXT,
-   sname TEXT,
-   cod TEXT, 
-   email TEXT,
-   tgid TETX);
-""")
-data.execute("""CREATE TABLE IF NOT EXISTS class(
-   classid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+data.execute("""CREATE TABLE IF NOT EXISTS occupation(
+   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    name TEXT,
-   cod TEXT,
-   grop TEXT,
-   email TEXT,
-   chairmanid INTEGER);
+   city TEXT);
 """)
+
+data.execute("""CREATE TABLE IF NOT EXISTS users(
+   user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+   nickname TEXT,
+   name TEXT,
+   position TEXT, 
+   timetable TEXT,
+   occupation_id INTEGER NOT NULL,
+   tgid TETX,
+   FOREIGN KEY (occupation_id) REFERENCES occupation(id));
+""")
+
 
 df.commit()
 data = df.cursor()
-data.execute("""CREATE TABLE IF NOT EXISTS users_class(
-    id INTEGER  PRIMARY KEY,
-    userid INTEGER,
-    classid INTEGER,
-    FOREIGN KEY (userid) REFERENCES users(userid),
-    FOREIGN KEY (classid) REFERENCES class(classid));
+data.execute("""CREATE TABLE IF NOT EXISTS room(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    number INTEGER,
+    occupation_id INTEGER,
+    FOREIGN KEY (occupation_id) REFERENCES occupation(id));
 """)
 
+
+data.execute("""CREATE TABLE IF NOT EXISTS computer(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    room_number INTEGER,
+    room_occupation_id INTEGER,
+    FOREIGN KEY (room_number) REFERENCES room(number),
+    FOREIGN KEY (room_occupation_id) REFERENCES room(occupation_id));
+""")
 data.execute("SELECT * FROM users;")
 print(data.fetchall(), 'users')
-data.execute("SELECT * FROM class")
-print(data.fetchall(), 'class')
-
+data.execute("SELECT * FROM occupation;")
+print(data.fetchall(), 'occupation')
+data.execute("SELECT * FROM room;")
+print(data.fetchall(), 'room')
+data.execute("SELECT * FROM computer;")
+print(data.fetchall(), 'computer')
 print(os.path.join('database.py'))
 df.commit()
 df.close()
