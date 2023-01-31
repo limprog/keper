@@ -5,7 +5,15 @@ import os
 import socket
 import time
 import requests
-test_url = "http://httpbin.org/post"
+import base64
+import uuid
+import  io
+import pyautogui as pyautogui
+from requests_toolbelt import MultipartEncoder
+
+
+url = "http://127.0.0.1:5000"
+
 
 class Screenshoot():
     def __init__(self, der):
@@ -18,4 +26,33 @@ class Screenshoot():
         now = datetime.now()
         now_time = now.strftime("%H_%M_%S")
         screen = pyautogui.screenshot(os.path.join('data', der, f'{now_time}.png'))
+        print(screen)
         resize(image=screen)
+        departure(now_time, screen, der)
+
+
+def departure(time, img, der):
+    mem_file = io.BytesIO()
+    img.save(mem_file, "PNG")
+    mem_file.seek(0)
+    files = {
+        'image': (
+            'img.png',
+            mem_file,
+            'image/png'
+        )
+    }
+    data = {
+        'id': '1',
+        "time":time,
+        "der":der,
+    }
+    r = requests.post(
+        url+"/scr",
+        data=data,
+        files=files
+    )
+
+if __name__ == '__main__':
+    scr = Screenshoot("hhh")
+    scr.screen("lll")
