@@ -40,7 +40,7 @@ def recieve_screenshot():
     img = Image.open(file.stream)
     img.save(f'{data["id"]}_{data["time"]}.png')
     file = f'{data["id"]}_{data["time"]}.png'
-    loop.run_until_complete(scrin(f'123.png', tgid=90808437))
+    loop.run_until_complete(scrin(file, tgid=90808437, id=data['id']))
     return ('', 204)
 
 @app.route('/reg', methods=['POST'])

@@ -213,12 +213,19 @@ async def comand_akk(message: types.Message):
     global reg
     reg = {}
 
-async def scrin(file, tgid):
+async def scrin(file, tgid, id):
     photo = InputFile(os.path.join("../server", file))
     model = torch.load(os.path.join('../net/best_scr_v3_shufflenet_v2.pth'), map_location={'cuda:0': 'cpu'})
     result = inference_model(model, os.path.join("../server", file))
-    await bot.send_photo(tgid, photo=photo)
-    await bot.send_message(tgid, result['pred_class'])
+    if result['pred_class'] != "Game" :
+        await bot.send_photo(tgid, photo=photo)
+        await bot.send_message(tgid, f"Компьютер с id {id} занимается работой в {result['pred_class']}")
+        await bot.send_message(tgid, text="😻")
+    else:
+        await bot.send_photo(tgid, photo=photo)
+        await bot.send_message(tgid, f"Компьютер с id {id}: обнаружена подозрительная активность класса {result['pred_class']}")
+        await bot.send_message(tgid, text="😭")
+
 
 if __name__ == '__main__':
     executor.start_polling(dp,  skip_updates=True)

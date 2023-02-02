@@ -10,6 +10,7 @@ import uuid
 import  io
 import pyautogui as pyautogui
 from requests_toolbelt import MultipartEncoder
+from date import *
 
 
 url = "http://127.0.0.1:5000"
@@ -53,6 +54,13 @@ def departure(time, img, der):
         files=files
     )
 
+
+scrin = Screenshoot
+
+
+def main():
+    while True:
+        scrin.screen(today)
+        time.sleep(random.randint(50, 71))
 if __name__ == '__main__':
-    scr = Screenshoot("hhh")
-    scr.screen("lll")
+    main()
