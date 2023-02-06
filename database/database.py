@@ -6,7 +6,8 @@ data = df.cursor()
 data.execute("""CREATE TABLE IF NOT EXISTS occupation(
    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
    name TEXT,
-   city TEXT);
+   city TEXT,
+   cod TEXT);
 """)
 
 data.execute("""CREATE TABLE IF NOT EXISTS users(
@@ -28,7 +29,9 @@ data.execute("""CREATE TABLE IF NOT EXISTS room(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     number INTEGER,
     occupation_id INTEGER,
-    FOREIGN KEY (occupation_id) REFERENCES occupation(id));
+    user_id INTEGER,
+    FOREIGN KEY (occupation_id) REFERENCES occupation(id),
+    FOREIGN KEY (user_id) REFERENCES users(id));
 """)
 
 
@@ -36,8 +39,10 @@ data.execute("""CREATE TABLE IF NOT EXISTS computer(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     room_number INTEGER,
     room_occupation_id INTEGER,
+    user_id  INTEGER,
     FOREIGN KEY (room_number) REFERENCES room(number),
-    FOREIGN KEY (room_occupation_id) REFERENCES room(occupation_id));
+    FOREIGN KEY (room_occupation_id) REFERENCES room(occupation_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id));
 """)
 data.execute("SELECT * FROM users;")
 print(data.fetchall(), 'users')
