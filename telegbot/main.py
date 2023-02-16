@@ -529,9 +529,31 @@ async def comand_auht_op(message: types.Message, state: FSMContext):
         await state.finish()
 
 
-async def scrin(file, tgid, id):
-    photo = InputFile(os.path.join("../server", file))
-    result = inference_model(model, os.path.join("../server", file))
+@dp.message_handler(commands=['stat'])
+async def commad_stat(message: types.Message, state: FSMContext):
+    await message.answer("Введите id компа, с которого были сделаны сегодня скриншоты")
+    await states.stat_id.set()
+
+
+@dp.message_handler(state=states.stat_id)
+async def commad_stat(message: types.Message, state: FSMContext):
+    await state.update_data(stat_id=message.text)
+    data = await state.get_data()
+    stat = {}
+    print(data["stat_id"])
+    stat["stat_id"] = data["stat_id"]
+    r = requests.post(url+"/stat/today", data=stat)
+    if r.status_code == 202:
+        photo = InputFile(os.path.join("../server/loogs/2023-02-09", data["stat_id"]+'.png'))
+        await bot.send_photo(message.from_user.id, photo=photo)
+        await state.finish()
+
+    else:
+        await message.answer("404")
+
+
+async def scrin(file, tgid, id,result):
+    photo = InputFile(os.path.join("../server/img", file))
     if result['pred_class'] != "Game":
         await bot.send_photo(tgid, photo=photo)
         await bot.send_message(tgid, f"Компьютер с id {id} занимается работой в {result['pred_class']}")

@@ -33,10 +33,10 @@ class Screenshoot():
         screen = pyautogui.screenshot(os.path.join('data', der, f'{now_time}.png'))
         print(screen)
         resize(image=screen)
-        departure(now_time, screen, der)
+        departure(now_time, screen, der, tgid)
 
 
-def departure(time, img, der):
+def departure(time, img, der, tgid):
     mem_file = io.BytesIO()
     img.save(mem_file, "PNG")
     mem_file.seek(0)
@@ -51,6 +51,7 @@ def departure(time, img, der):
         'id': '1',
         "time":time,
         "der":der,
+        "tgid":tgid
     }
     r = requests.post(
         url+"/scr",
@@ -62,11 +63,12 @@ def departure(time, img, der):
 scrin = Screenshoot()
 
 
-@sched.scheduled_job('cron', day_of_week=date_of_week, hour=time1[0:1], minute=time1[3:4], second='*/3')
-def main():
+def main1():
     while True:
         print('gg')
         scrin.screen(today)
-        time.sleep(random.randint(1, 2))
+        time.sleep(random.randint(50, 70))
+
+
 if __name__ == '__main__':
-    main()
+    pass

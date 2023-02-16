@@ -8,7 +8,14 @@ import os
 from PIL import Image
 from telegbot.main import *
 import asyncio
+import torch
+import torchvision
+import torchvision.transforms as transforms
+from reader import *
+from writer import *
 
+
+model = torch.load(os.path.join('../net/best_scr_v3_shufflenet_v2.pth'), map_location={'cuda:0': 'cpu'})
 
 
 def get_db_connection():
@@ -34,10 +41,14 @@ def recieve_screenshot():
     print(request.files, request.form)
     data = request.form
     file = request.files['image']
+    os.makedirs('img', exist_ok=True)
     img = Image.open(file.stream)
-    img.save(f'{data["id"]}_{data["time"]}.png')
+    img.save(f'img/{data["id"]}_{data["time"]}.png')
     file = f'{data["id"]}_{data["time"]}.png'
-    loop.run_until_complete(scrin(file, tgid=1564980906, id=data['id']))
+    result = inference_model(model, os.path.join("../server/img", file))
+    writer(data['id'], result)
+    loop.run_until_complete(scrin(file, tgid=data['tgid'], id=data['id'],result=result))
+
     return ('', 204)
 
 @app.route('/reg', methods=['POST'])
@@ -186,6 +197,25 @@ def comp_reg():
     conn.close()
     ans = {'id': id, 'timetabel':timetabel, 'tgid':tgid}
     return (ans, 201)
+
+
+@app.route('/stat/today', methods=['POST'])
+def stat_today():
+    data = request.form
+    today = "2023-02-09"
+    loogs = os.listdir(f"loogs/{today}")
+    for i in loogs:
+        loog = i.split(".")[0::2]
+        print(loog[0])
+        print(data['stat_id'])
+        if loog[0] == data['stat_id']:
+            score = read(data['stat_id'], today)
+            return ("", 202)
+
+        else:
+            return ("",404)
+
+    return ("",201)
 
 
 if __name__ == '__main__':

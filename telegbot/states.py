@@ -35,3 +35,4 @@ class States(StatesGroup):
     op_name2 = State()
     op_cod2 = State()
     answer4 = State()
+    stat_id = State()
