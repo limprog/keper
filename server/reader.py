@@ -25,6 +25,16 @@ def csv_to_img(df):
     plt.savefig("loogs/2023-02-09/1.png")
 
 
+def read_class(id, date):
+    file = f'loogs/{date}/{id}.csv'
+    data = pd.read_csv(file)
+    print(data)
+    data['g_o_b'] = data['result'] != "Game"
+    score = round(data['g_o_b'].sum()/data.shape[0], 2)
+    data.to_csv(file, index=False)
+    csv_to_img(data)
+    return score
+
 
 if __name__ == '__main__':
     read(1, "2023-02-09")

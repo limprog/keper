@@ -56,11 +56,13 @@ def reg():
     data = request.form
     print(data)
     conn, cur = get_db_connection()
-    conn.execute('INSERT INTO users(name, nickname, position, timetable, tgid, cod) VALUES (?, ?, ?, ?, ?, ?)',
+    cur.execute('INSERT INTO users(name, nickname, position, timetable, tgid, cod) VALUES (?, ?, ?, ?, ?, ?)',
                  (data['name'], data['nickname'], data["position"], data['timetable'], data['tgid'], data["cod"],))
+    id = cur.lastrowid
+    print(id)
     conn.commit()
     conn.close()
-    return ('', 204)
+    return ("ggtgyfku", 204)
 
 
 @app.route('/auth', methods=['POST'])
@@ -74,7 +76,7 @@ def auth():
     if row == []:
         return ("", 418)
     if row[0][1] == data['nickname']:
-        return (f'{row[0][2]}', 201)
+        return ({"name":row[0][2], "id":row[0][0]}, 201)
     else:
         return ('', 401)
 
@@ -168,7 +170,7 @@ def op_auth():
     conn, cur = get_db_connection()
     cur.execute("SELECT * FROM occupation where name  = ?", (data['op_name'],))
     row = cur.fetchall()
-    if row[0][1] == data['op_cod']:
+    if row[0][-1] == data['op_cod']:
         return ('',201)
     else:
         return ('',418)
@@ -202,7 +204,7 @@ def comp_reg():
 @app.route('/stat/today', methods=['POST'])
 def stat_today():
     data = request.form
-    today = "2023-02-09"
+    today = str(date.today())
     loogs = os.listdir(f"loogs/{today}")
     for i in loogs:
         loog = i.split(".")[0::2]
@@ -210,12 +212,36 @@ def stat_today():
         print(data['stat_id'])
         if loog[0] == data['stat_id']:
             score = read(data['stat_id'], today)
-            return ("", 202)
+            s =[]
+            s.append(score)
+            return (s, 202)
 
         else:
             return ("",404)
 
     return ("",201)
+
+
+@app.route('/stat/class', methods=['POST'])
+def stat_class():
+    data = request.form()
+    conn, cur = get_db_connection()
+    cur.execute("SELECT * FROM users where nickname  = ?", (data['nickname'],))
+    row = cur.fetchall()
+    us_id = row[0][0]
+    cur.execute("SELECT * FROM computer where room_number, user_id  = ?", (data["room_nb"], us_id))
+    row = cur.fetchall()
+    #today = str(date.today())
+    today = "2023-02-09"
+    id = []
+    scores = {}
+    for i in row:
+        id.append(i[0])
+    for j in id:
+        score = read_class(j, today)
+        scores[j] = score
+    print(scores)
+
 
 
 if __name__ == '__main__':

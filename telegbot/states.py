@@ -36,3 +36,5 @@ class States(StatesGroup):
     op_cod2 = State()
     answer4 = State()
     stat_id = State()
+    id = State()
+    roon_rb = State()

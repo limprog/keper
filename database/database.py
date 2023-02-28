@@ -52,6 +52,7 @@ data.execute("SELECT * FROM room;")
 print(data.fetchall(), 'room')
 data.execute("SELECT * FROM computer;")
 print(data.fetchall(), 'computer')
+
 print(os.path.join('database.py'))
 df.commit()
 df.close()
