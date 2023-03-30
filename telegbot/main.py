@@ -604,9 +604,11 @@ async def comand_auht_3(message: types.Message, state: FSMContext, ):
         await message.answer("Неправельный пароль \n")
 
 
-@dp.callback_query_handler(lambda c: c.data == 'akk')
+@dp.callback_query_handler(lambda c: c.data == 'akk', state="*")
 async def change(message: types.Message, callback_query: types.CallbackQuery):
+    print("test")
     await bot.answer_callback_query(callback_query.id)
+
     await bot.send_message(callback_query.from_user.id, 'Нажата первая кнопка!')
 
 
