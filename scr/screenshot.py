@@ -7,7 +7,7 @@ import time
 import requests
 import base64
 import uuid
-import  io
+import io
 import pyautogui as pyautogui
 from requests_toolbelt import MultipartEncoder
 from date import *
@@ -20,7 +20,7 @@ sched = BlockingScheduler()
 url = "http://127.0.0.1:5000"
 
 
-class Screenshoot():
+class Screenshoot:
     def __init__(self, der=today):
         os.makedirs("data", exist_ok=True)
         os.makedirs(os.path.join('data', der), exist_ok=True)

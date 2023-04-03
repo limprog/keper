@@ -42,8 +42,8 @@ greet_kb.add(button_h1, button_h2, button_h3, button_h4, button_h5, button_h6, b
 akk_btn = InlineKeyboardButton('Информация об аккаунте', callback_data='akk')
 rem_btn = InlineKeyboardButton('Выход из аккаунта', callback_data='rem')
 del_btn = InlineKeyboardButton("Удаление аккаунта", callback_data='del')
-osn_com_to_c_bnt = InlineKeyboardButton("Изменение аккаунта >>", callback_data='osn_com_to_c')
-osn_com_to_stat_bnt = InlineKeyboardButton("<< Статистика", callback_data='osn_com_to_stat')
+osn_com_to_c_bnt = InlineKeyboardButton("Изменение аккаунта >>", callback_data='c')
+osn_com_to_stat_bnt = InlineKeyboardButton("<< Статистика", callback_data='stat')
 osn_com_kb = InlineKeyboardMarkup()
 osn_com_kb.row(rem_btn, del_btn)
 osn_com_kb.row(akk_btn)
@@ -53,8 +53,8 @@ osn_com_kb.row(osn_com_to_stat_bnt,osn_com_to_c_bnt)
 с_nickname_btn = InlineKeyboardButton("Изменение никнейма", callback_data='с_nickname')
 c_cod_btn = InlineKeyboardButton("Изменение пороля", callback_data='с_cod')
 c_time_btn = InlineKeyboardButton("Изменение расписания", callback_data='с_time')
-c_to_osn_com = InlineKeyboardButton("<< Основные команды", callback_data='с_to_osn_com')
-c_to_org_com = InlineKeyboardButton("Организационные команды >>", callback_data='с_to_org_com')
+c_to_osn_com = InlineKeyboardButton("<< Основные команды", callback_data='osn')
+c_to_org_com = InlineKeyboardButton("Организационные команды >>", callback_data='org')
 change_kb = InlineKeyboardMarkup().add(с_name_btn, с_nickname_btn)
 change_kb.add(c_cod_btn, c_time_btn)
 change_kb.add(c_to_osn_com, c_to_org_com)
@@ -62,8 +62,8 @@ change_kb.add(c_to_osn_com, c_to_org_com)
 reg_op_btn = InlineKeyboardButton("Регистрация организации", callback_data='reg_op')
 auth_op_btn = InlineKeyboardButton("Авторизация в организацию", callback_data='auth_op')
 room_reg_btn = InlineKeyboardButton("Регистрация комнаты", callback_data='reg_room')
-org_com_to_c_bth = InlineKeyboardButton("<< Изменение аккаунта", callback_data='org_com_to_c')
-org_com_to_stat_bth = InlineKeyboardButton("Статистика >>", callback_data="org_com_to_stat")
+org_com_to_c_bth = InlineKeyboardButton("<< Изменение аккаунта", callback_data='c')
+org_com_to_stat_bth = InlineKeyboardButton("Статистика >>", callback_data="stat")
 org_com_kb = InlineKeyboardMarkup()
 org_com_kb.add(reg_op_btn, auth_op_btn)
 org_com_kb.add(room_reg_btn)
@@ -71,11 +71,16 @@ org_com_kb.add(org_com_to_c_bth, org_com_to_stat_bth)
 # Статистика
 stat_today_btn = InlineKeyboardButton("Статистика по компютеру", callback_data="stat_today")
 stat_class_btn = InlineKeyboardButton("Статистика по классам", callback_data="stat_class" )
-stat_to_org_com_btn = InlineKeyboardButton("<< Организационные команды", callback_data="stat_to_org_com")
-stat_to_osn_com_btn = InlineKeyboardButton("Основные команды >>", callback_data="stat_to_osn_com")
+stat_to_org_com_btn = InlineKeyboardButton("<< Организационные команды", callback_data="org")
+stat_to_osn_com_btn = InlineKeyboardButton("Основные команды >>", callback_data="osn")
 stat_kb = InlineKeyboardMarkup().add(stat_today_btn)
 stat_kb.add(stat_class_btn)
 stat_kb.add(stat_to_org_com_btn,stat_to_osn_com_btn )
+#регистрация и аунтофикация
+ra_reg_btn = InlineKeyboardButton("Регистрация", callback_data="ra_reg")
+ra_auht_btn = InlineKeyboardButton("Аунтофиткация", callback_data="ra_auht")
+ra_com_kb = InlineKeyboardMarkup().add(ra_reg_btn)
+ra_com_kb.add(ra_auht_btn)
 # await bot.send_message(message.from_user.id, "test message")
 model = torch.load(os.path.join('../net/best_scr_v3_shufflenet_v2.pth'), map_location={'cuda:0': 'cpu'})
 
@@ -87,9 +92,43 @@ model = torch.load(os.path.join('../net/best_scr_v3_shufflenet_v2.pth'), map_loc
 async def comand_start(message: types.Message, state: FSMContext):
     reg = await state.get_data()
     if not reg:
-        await message.answer(ANSWER_COM_START)
+        await message.answer(ANSWER_COM_START, reply_markup=ra_com_kb)
     else:
         await message.answer("Основные команды для аккаунта", reply_markup=osn_com_kb)
+
+
+@dp.message_handler(commands=['menu'], state='*')
+async def comand_start(message: types.Message, state: FSMContext):
+    reg = await state.get_data()
+    if not reg:
+        await message.answer("Регистрация и аунтофикация", reply_markup=ra_com_kb)
+    else:
+        await message.answer("Основные команды для аккаунта", reply_markup=osn_com_kb)
+
+
+@dp.callback_query_handler(lambda c: c.data == 'c', state="*")
+async def command_akk_to_c(callback_query: types.CallbackQuery):
+    await bot.answer_callback_query(callback_query.id)
+    await callback_query.message.edit_text('Изменение аккаунта', reply_markup=change_kb)
+
+
+@dp.callback_query_handler(lambda c: c.data == 'org', state="*")
+async def command_с_to_org(callback_query: types.CallbackQuery):
+    await bot.answer_callback_query(callback_query.id)
+    await callback_query.message.edit_text('Организацеонные команды', reply_markup=org_com_kb)
+
+
+@dp.callback_query_handler(lambda c: c.data == 'stat', state="*")
+async def command_org_to_stat(callback_query: types.CallbackQuery):
+    await bot.answer_callback_query(callback_query.id)
+    await callback_query.message.edit_text('Статистика', reply_markup=stat_kb)
+
+
+@dp.callback_query_handler(lambda c: c.data == 'osn', state="*")
+async def command_org_to_stat(callback_query: types.CallbackQuery):
+    await bot.answer_callback_query(callback_query.id)
+    await callback_query.message.edit_text('основные команды', reply_markup=osn_com_kb)
+
 
 @dp.message_handler(commands=["help"], state='*')
 async def comand_help(message: types.Message):
@@ -97,7 +136,7 @@ async def comand_help(message: types.Message):
         await message.answer(ANSWER_COM_HELP)
 
 
-
+#await bot.delete_message(chat_id=call.from_user.id, message_id=call.message.message_id)
 @dp.message_handler(commands=["info"], state='*')
 async def comand_info(message: types.Message):
     await message.answer(ANSWER_COM_INFO)
@@ -107,11 +146,15 @@ async def comand_info(message: types.Message):
 async def comand_insaider(message: types.Message):
     await message.answer(ANSWER_COM_INSADER)
 
-
-@dp.message_handler(commands=['akk'], state='*')
-async def comand_akk(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(lambda c: c.data == 'akk', state="*")
+async def command_akk_to(callback_query: types.CallbackQuery, state: FSMContext):
+    await bot.answer_callback_query(callback_query.id)
     data = await state.get_data()
-    await message.answer(f'Ваше имя {data["name"]} \nВаш никнейм {data["nickname"]} ')
+    await bot.send_message(callback_query.from_user.id, f'Ваше имя {data["name"]} \nВаш никнейм {data["nickname"]} ')
+
+
+
+
 
 
 @dp.message_handler(commands=['rem'], state='*')
@@ -604,12 +647,6 @@ async def comand_auht_3(message: types.Message, state: FSMContext, ):
         await message.answer("Неправельный пароль \n")
 
 
-@dp.callback_query_handler(lambda c: c.data == 'akk', state="*")
-async def change(message: types.Message, callback_query: types.CallbackQuery):
-    print("test")
-    await bot.answer_callback_query(callback_query.id)
-
-    await bot.send_message(callback_query.from_user.id, 'Нажата первая кнопка!')
 
 
 async def scrin(file, tgid, id, result):
