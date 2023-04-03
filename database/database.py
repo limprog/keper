@@ -17,8 +17,8 @@ data.execute("""CREATE TABLE IF NOT EXISTS users(
    position TEXT, 
    timetable TEXT,
    occupation_id INTEGER,
-   tgid TETX,
-   cod TETX,
+   tgid TEXT,
+   cod TEXT,
    FOREIGN KEY (occupation_id) REFERENCES occupation(id));
 """)
 
