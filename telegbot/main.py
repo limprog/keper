@@ -77,8 +77,8 @@ stat_kb = InlineKeyboardMarkup().add(stat_today_btn)
 stat_kb.add(stat_class_btn)
 stat_kb.add(stat_to_org_com_btn,stat_to_osn_com_btn )
 #регистрация и аунтофикация
-ra_reg_btn = InlineKeyboardButton("Регистрация", callback_data="ra_reg")
-ra_auht_btn = InlineKeyboardButton("Аунтофиткация", callback_data="ra_auht")
+ra_reg_btn = InlineKeyboardButton("Регистрация", callback_data="reg")
+ra_auht_btn = InlineKeyboardButton("Аунтофиткация", callback_data="auth")
 ra_com_kb = InlineKeyboardMarkup().add(ra_reg_btn)
 ra_com_kb.add(ra_auht_btn)
 # await bot.send_message(message.from_user.id, "test message")
@@ -92,7 +92,8 @@ model = torch.load(os.path.join('../net/best_scr_v3_shufflenet_v2.pth'), map_loc
 async def comand_start(message: types.Message, state: FSMContext):
     reg = await state.get_data()
     if not reg:
-        await message.answer(ANSWER_COM_START, reply_markup=ra_com_kb)
+        await message.answer(ANSWER_COM_START)
+        await message.answer("Регистрация и аунтофикация", reply_markup=ra_com_kb)
     else:
         await message.answer("Основные команды для аккаунта", reply_markup=osn_com_kb)
 
@@ -127,7 +128,7 @@ async def command_org_to_stat(callback_query: types.CallbackQuery):
 @dp.callback_query_handler(lambda c: c.data == 'osn', state="*")
 async def command_org_to_stat(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id)
-    await callback_query.message.edit_text('основные команды', reply_markup=osn_com_kb)
+    await callback_query.message.edit_text('Основные команды', reply_markup=osn_com_kb)
 
 
 @dp.message_handler(commands=["help"], state='*')
@@ -501,6 +502,20 @@ async def commad_stat_room_1(message: types.Message, state: FSMContext):
     if r.status_code == 201:
         await message.answer("ТиПо СтАтА")
 
+
+
+@dp.callback_query_handler(lambda c: c.data == 'reg', state="*")
+async def comand_reg(callback_query: types.CallbackQuery, state: FSMContext):
+    reg = await state.get_data()
+    await bot.delete_message(chat_id=callback_query.from_user.id, message_id=callback_query.message.message_id)
+    await bot.answer_callback_query(callback_query.id)
+    if not reg:
+
+        await bot.send_message(callback_query.from_user.id, "Для регистрации введите свое имя")
+        await states.name.set()
+    else:
+        await bot.send_message(callback_query.from_user.id, "В аккаунт выполнен вход.\nВаш никнейм: {reg['nickname']}")
+
 @dp.message_handler(commands=['reg'], state='*')
 async def comand_reg(message: types.Message, state: FSMContext):
     reg = await state.get_data()
@@ -608,6 +623,17 @@ async def comand_reg_r(message: types.Message, state: FSMContext):
         await message.answer('Потвердите пароль')
         await states.rcod.set()
 
+
+@dp.callback_query_handler(lambda c: c.data == 'auth', state="*")
+async def comand_auht_1(callback_query: types.CallbackQuery, state: FSMContext):
+    await bot.delete_message(chat_id=callback_query.from_user.id, message_id=callback_query.message.message_id)
+    reg = await state.get_data()
+    await bot.answer_callback_query(callback_query.id)
+    if not reg:
+        await bot.send_message(callback_query.from_user.id, "Для аунтофикации введдите свой никнейм")
+        await states.nickname2.set()
+    else:
+        await bot.send_message(callback_query.from_user.id, f"В аккаунт выполнин вход\nВаш никнейм: {reg['nickname']}")
 
 @dp.message_handler(commands=['auth'], state='*')
 async def comand_auht_1(message: types.Message, state: FSMContext):
