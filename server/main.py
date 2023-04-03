@@ -75,7 +75,7 @@ def auth():
     print(row)
     if row == []:
         return ("", 418)
-    if row[0][1] == data['nickname']:
+    if row[0][1] == data['nickname'] and row[0][-1] == data["cod"]:
         return ({"name":row[0][2], "id":row[0][0]}, 201)
     else:
         return ('', 401)
