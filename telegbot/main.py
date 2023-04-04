@@ -49,13 +49,13 @@ osn_com_kb.row(rem_btn, del_btn)
 osn_com_kb.row(akk_btn)
 osn_com_kb.row(osn_com_to_stat_bnt,osn_com_to_c_bnt)
 # Изменение аккаунта
-с_name_btn = InlineKeyboardButton("Изменение имени", callback_data='с_name')
-с_nickname_btn = InlineKeyboardButton("Изменение никнейма", callback_data='с_nickname')
-c_cod_btn = InlineKeyboardButton("Изменение пороля", callback_data='с_cod')
-c_time_btn = InlineKeyboardButton("Изменение расписания", callback_data='с_time')
+c_name_btn = InlineKeyboardButton("Изменение имени", callback_data='c_name')
+c_nickname_btn = InlineKeyboardButton("Изменение никнейма", callback_data='c_nickname')
+c_cod_btn = InlineKeyboardButton("Изменение пороля", callback_data='c_cod')
+c_time_btn = InlineKeyboardButton("Изменение расписания", callback_data='c_time')
 c_to_osn_com = InlineKeyboardButton("<< Основные команды", callback_data='osn')
 c_to_org_com = InlineKeyboardButton("Организационные команды >>", callback_data='org')
-change_kb = InlineKeyboardMarkup().add(с_name_btn, с_nickname_btn)
+change_kb = InlineKeyboardMarkup().add(c_name_btn, c_nickname_btn)
 change_kb.add(c_cod_btn, c_time_btn)
 change_kb.add(c_to_osn_com, c_to_org_com)
 # Организациооные команды
@@ -68,9 +68,11 @@ org_com_kb = InlineKeyboardMarkup()
 org_com_kb.add(reg_op_btn, auth_op_btn)
 org_com_kb.add(room_reg_btn)
 org_com_kb.add(org_com_to_c_bth, org_com_to_stat_bth)
+org_ra_kb = InlineKeyboardMarkup().add(reg_op_btn)
+org_ra_kb.add(auth_op_btn)
 # Статистика
 stat_today_btn = InlineKeyboardButton("Статистика по компютеру", callback_data="stat_today")
-stat_class_btn = InlineKeyboardButton("Статистика по классам", callback_data="stat_class" )
+stat_class_btn = InlineKeyboardButton("Статистика по комнатам", callback_data="stat_room" )
 stat_to_org_com_btn = InlineKeyboardButton("<< Организационные команды", callback_data="org")
 stat_to_osn_com_btn = InlineKeyboardButton("Основные команды >>", callback_data="osn")
 stat_kb = InlineKeyboardMarkup().add(stat_today_btn)
@@ -137,7 +139,6 @@ async def comand_help(message: types.Message):
         await message.answer(ANSWER_COM_HELP)
 
 
-#await bot.delete_message(chat_id=call.from_user.id, message_id=call.message.message_id)
 @dp.message_handler(commands=["info"], state='*')
 async def comand_info(message: types.Message):
     await message.answer(ANSWER_COM_INFO)
@@ -147,6 +148,24 @@ async def comand_info(message: types.Message):
 async def comand_insaider(message: types.Message):
     await message.answer(ANSWER_COM_INSADER)
 
+
+@dp.message_handler(commands=["debug"], state='*')
+async def comand_insaider(message: types.Message):
+    await message.answer("Введете дебагинг код")
+    await states.decod.set()
+
+
+@dp.message_handler(state=states.decod)
+async def comand_insaider(message: types.Message, state: FSMContext):
+    await state.update_data(decod=message.text)
+    data = await state.get_data()
+    if int(data["decod"])==4321:
+        await state.update_data(debug=1)
+
+
+
+
+
 @dp.callback_query_handler(lambda c: c.data == 'akk', state="*")
 async def command_akk_to(callback_query: types.CallbackQuery, state: FSMContext):
     await bot.answer_callback_query(callback_query.id)
@@ -155,24 +174,42 @@ async def command_akk_to(callback_query: types.CallbackQuery, state: FSMContext)
 
 
 
-
-
-
-@dp.message_handler(commands=['rem'], state='*')
-async def comand_akk(message: types.Message, state: FSMContext):
-    await message.answer("Вы вышли из акаунта")
+@dp.callback_query_handler(lambda c: c.data == 'rem', state="*")
+async def comand_akk(callback_query: types.CallbackQuery, state: FSMContext):
+    await bot.answer_callback_query(callback_query.id)
+    await bot.send_message(callback_query.from_user.id,"Вы вышли из акаунта")
     await state.finish()
 
 
-@dp.message_handler(commands=['del'], state='*')
-async def com_del(message: types.Message, state: FSMContext):
+
+# @dp.message_handler(commands=['rem'], state='*')
+# async def comand_akk(message: types.Message, state: FSMContext):
+#     await message.answer("Вы вышли из акаунта")
+#     await state.finish()
+
+
+@dp.callback_query_handler(lambda c: c.data == 'del', state="*")
+async def command_del(callback_query: types.CallbackQuery, state: FSMContext):
     reg = await state.get_data()
+    await bot.answer_callback_query(callback_query.id)
     if reg:
         data = await state.get_data()
-        await message.answer("вы уверенны что хотите удалить аккаунт")
+        await bot.send_message(callback_query.from_user.id,"вы уверенны что хотите удалить аккаунт")
         await states.del1.set()
     else:
-        await message.answer("Зарегестрируйтесь или войдите")
+        await bot.send_message(callback_query.from_user.id, "Регистрация и аунтофикация", reply_markup=ra_com_kb)
+
+
+
+# @dp.message_handler(commands=['del'], state='*')
+# async def com_del(message: types.Message, state: FSMContext):
+#     reg = await state.get_data()
+#     if reg:
+#         data = await state.get_data()
+#         await message.answer("вы уверенны что хотите удалить аккаунт")
+#         await states.del1.set()
+#     else:
+#         await message.answer("Зарегестрируйтесь или войдите")
 
 
 @dp.message_handler(state=states.del1)
@@ -188,14 +225,25 @@ async def del_1(message: types.Message, state: FSMContext):
         pass
 
 
-@dp.message_handler(commands=['c_name'], state='*')
-async def comand_chan_name(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(lambda c: c.data == 'c_name', state="*")
+async def comand_chan_name(callback_query: types.CallbackQuery, state: FSMContext):
     reg = await state.get_data()
+    await bot.answer_callback_query(callback_query.id)
     if reg:
-        await message.answer("вы уверенны что хотите изменить аккаунт")
+        await bot.send_message(callback_query.from_user.id,"вы уверенны что хотите изменить аккаунт")
         await states.chan_name.set()
     else:
-        await message.answer("Зарегестрируйтесь или войдите")
+        await bot.send_message(callback_query.from_user.id, "Регистрация и аунтофикация", reply_markup=ra_com_kb)
+
+
+# @dp.message_handler(commands=['c_name'], state='*')
+# async def comand_chan_name(message: types.Message, state: FSMContext):
+#     reg = await state.get_data()
+#     if reg:
+#         await message.answer("вы уверенны что хотите изменить аккаунт")
+#         await states.chan_name.set()
+#     else:
+#         await message.answer("Зарегестрируйтесь или войдите")
 
 
 @dp.message_handler(state=states.chan_name)
@@ -225,16 +273,25 @@ async def chan_name2(message: types.Message, state: FSMContext):
         await state.update_data(name=data['chan_name2'])
 
 
-
-
-@dp.message_handler(commands=['c_nickname'], state='*')
-async def comand_chan_name(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(lambda c: c.data == 'c_nickname', state="*")
+async def comand_chan_name(callback_query: types.CallbackQuery, state: FSMContext):
     reg = await state.get_data()
+    await bot.answer_callback_query(callback_query.id)
     if reg:
-        await message.answer("вы уверенны что хотите изменить аккаунт")
+        await bot.send_message(callback_query.from_user.id,"вы уверенны что хотите изменить аккаунт")
         await states.chan_nickname.set()
     else:
         await message.answer("Зарегестрируйтесь или войдите")
+
+
+# @dp.message_handler(commands=['c_nickname'], state='*')
+# async def comand_chan_name(message: types.Message, state: FSMContext):
+#     reg = await state.get_data()
+#     if reg:
+#         await message.answer("вы уверенны что хотите изменить аккаунт")
+#         await states.chan_nickname.set()
+#     else:
+#         await message.answer("Зарегестрируйтесь или войдите")
 
 
 @dp.message_handler(state=states.chan_nickname)
@@ -262,15 +319,25 @@ async def chan_name2(message: types.Message, state: FSMContext):
         await state.update_data(nickname=data['chan_nickname2'])
 
 
-
-@dp.message_handler(commands=['c_cod'], state='*')
-async def comand_chan_name(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(lambda c: c.data == 'c_cod', state="*")
+async def comand_chan_name(callback_query: types.CallbackQuery, state: FSMContext):
     reg = await state.get_data()
+    await bot.answer_callback_query(callback_query.id)
     if reg:
-        await message.answer("вы уверенны что хотите изменить аккаунт")
+        await bot.send_message(callback_query.from_user.id,"вы уверенны что хотите изменить аккаунт")
         await states.chan_cod.set()
     else:
-        await message.answer("Зарегестрируйтесь или войдите")
+        await bot.send_message(callback_query.from_user.id, "Регистрация и аунтофикация", reply_markup=ra_com_kb)
+
+
+# @dp.message_handler(commands=['c_cod'], state='*')
+# async def comand_chan_name(message: types.Message, state: FSMContext):
+#     reg = await state.get_data()
+#     if reg:
+#         await message.answer("вы уверенны что хотите изменить аккаунт")
+#         await states.chan_cod.set()
+#     else:
+#         await message.answer("Зарегестрируйтесь или войдите")
 
 
 @dp.message_handler(state=states.chan_cod)
@@ -298,15 +365,25 @@ async def chan_name2(message: types.Message, state: FSMContext):
         await message.answer("Все хорошо")
 
 
-
-@dp.message_handler(commands=['c_time'], state='*')
-async def comand_chan_name(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(lambda c: c.data == 'c_time', state="*")
+async def comand_chan_name(callback_query: types.CallbackQuery, state: FSMContext):
     reg = await state.get_data()
+    await bot.answer_callback_query(callback_query.id)
     if reg:
-        await message.answer("вы уверенны что хотите изменить аккаунт")
+        await bot.send_message(callback_query.from_user.id, "вы уверенны что хотите изменить аккаунт")
         await states.chan_time.set()
     else:
-        await message.answer("Зарегестрируйтесь или войдите")
+        await bot.send_message(callback_query.from_user.id, "Регистрация и аунтофикация", reply_markup=ra_com_kb)
+
+
+# @dp.message_handler(commands=['c_time'], state='*')
+# async def comand_chan_name(message: types.Message, state: FSMContext):
+#     reg = await state.get_data()
+#     if reg:
+#         await message.answer("вы уверенны что хотите изменить аккаунт")
+#         await states.chan_time.set()
+#     else:
+#         await message.answer("Зарегестрируйтесь или войдите")
 
 
 @dp.message_handler(state=states.chan_time)
@@ -341,14 +418,25 @@ async def chan_name2(message: types.Message, state: FSMContext):
         await message.answer("Все хорошо")
 
 
-@dp.message_handler(commands=['room_reg'], state='*')
-async def room_reg(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(lambda c: c.data == 'reg_room', state="*")
+async def command_room_reg(callback_query: types.CallbackQuery, state: FSMContext):
     reg = await state.get_data()
+    await bot.answer_callback_query(callback_query.id)
     if reg:
-        await message.answer('для регистации наберите номер кабинета')
+        await bot.send_message(callback_query.from_user.id,'для регистации наберите номер кабинета')
         await states.room_name.set()
     else:
-        await message.answer("Зарегестрируйтесь или войдите")
+        await bot.send_message(callback_query.from_user.id, "Регистрация и аунтофикация", reply_markup=ra_com_kb)
+
+
+# @dp.message_handler(commands=['room_reg'], state='*')
+# async def room_reg(message: types.Message, state: FSMContext):
+#     reg = await state.get_data()
+#     if reg:
+#         await message.answer('для регистации наберите номер кабинета')
+#         await states.room_name.set()
+#     else:
+#         await bot.send_message(callback_query.from_user.id, "Регистрация и аунтофикация", reply_markup=ra_com_kb)
 
 
 @dp.message_handler(state=states.room_name)
@@ -356,7 +444,10 @@ async def chan_name2(message: types.Message, state: FSMContext):
     await state.update_data(room_name=message.text)
     data = await state.get_data()
     room = {}
-    room['op_name'] = data['op_name']
+    try:
+        room['op_name'] = data['op_name']
+    except:
+        await message.answer('Войдите или зарегестрируте орканизацию', reply_markup=ra_com_kb)
     room['nickname'] = data['nickname']
     room['name'] = data['room_name']
     r = requests.post(url + "/room/reg", data=room)
@@ -367,15 +458,25 @@ async def chan_name2(message: types.Message, state: FSMContext):
         await message.answer('все полохо')
 
 
-
-@dp.message_handler(commands=['reg_op'],  state='*')
-async def reg_op(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(lambda c: c.data == 'reg_op', state="*")
+async def reg_op(callback_query: types.CallbackQuery, state: FSMContext):
+    await bot.answer_callback_query(callback_query.id)
     reg = await state.get_data()
     if reg:
-        await message.answer('Для регистрации наберите название организации')
+        await bot.send_message(callback_query.from_user.id,'Для регистрации наберите название организации')
         await states.op_name.set()
     else:
-        await message.answer("Зарегестрируйтесь или войдите")
+        await bot.send_message(callback_query.from_user.id, "Регистрация и аунтофикация", reply_markup=ra_com_kb)
+
+
+# @dp.message_handler(commands=['reg_op'],  state='*')
+# async def reg_op(message: types.Message, state: FSMContext):
+#     reg = await state.get_data()
+#     if reg:
+#         await message.answer('Для регистрации наберите название организации')
+#         await states.op_name.set()
+#     else:
+#         await message.answer("Зарегестрируйтесь или войдите")
 
 
 @dp.message_handler(state=states.op_name)
@@ -435,14 +536,25 @@ async def comand_reg_r(message: types.Message, state: FSMContext):
         await states.op_rcod.set()
 
 
-@dp.message_handler(commands=['auth_op'], state='*')
-async def comand_auht_op(message: types.Message, state: FSMContext):
+@dp.callback_query_handler(lambda c: c.data == 'auth_op', state="*")
+async def comand_auht_op(callback_query: types.CallbackQuery, state: FSMContext):
     reg = await state.get_data()
+    await bot.answer_callback_query(callback_query.id)
     if reg:
-        await message.answer('Напишите название организации')
+        await bot.send_message(callback_query.from_user.id,'Напишите название организации')
         await states.op_name2.set()
     else:
-        print("error")
+        await bot.send_message(callback_query.from_user.id, "Регистрация и аунтофикация", reply_markup=ra_com_kb)
+
+
+# @dp.message_handler(commands=['auth_op'], state='*')
+# async def comand_auht_op(message: types.Message, state: FSMContext):
+#     reg = await state.get_data()
+#     if reg:
+#         await message.answer('Напишите название организации')
+#         await states.op_name2.set()
+#     else:
+#         print("error")
 
 
 @dp.message_handler(state=states.op_name2)
@@ -465,10 +577,16 @@ async def comand_auht_op(message: types.Message, state: FSMContext):
         await message.answer('Неправильный пароль')
 
 
-@dp.message_handler(commands=['stat'], state='*')
-async def commad_stat(message: types.Message, state: FSMContext):
-    await message.answer("Введите id компа, с которого были сделаны сегодня скриншоты")
+@dp.callback_query_handler(lambda c: c.data == 'stat_today', state="*")
+async def commad_stat_id_today(callback_query: types.CallbackQuery):
+    await bot.answer_callback_query(callback_query.id)
+    await bot.send_message(callback_query.from_user.id, "Введите id компа, с которого были сделаны сегодня скриншоты")
     await states.stat_id.set()
+
+# @dp.message_handler(commands=['stat'], state='*')
+# async def commad_stat(message: types.Message, state: FSMContext):
+#     await message.answer("Введите id компа, с которого были сделаны сегодня скриншоты")
+#     await states.stat_id.set()
 
 
 @dp.message_handler(state=states.stat_id)
@@ -485,10 +603,17 @@ async def commad_stat(message: types.Message, state: FSMContext):
         await message.answer("404")
 
 
-@dp.message_handler(commands=['stat_room'], state='*')
-async def commad_stat_room(message: types.Message, state: FSMContext):
-    await message.answer("Введите номер комнаты")
+@dp.callback_query_handler(lambda c: c.data == 'stat_room', state="*")
+async def commad_stat_room(callback_query: types.CallbackQuery, state: FSMContext):
+    await bot.answer_callback_query(callback_query.id)
+    await bot.send_message(callback_query.from_user.id, "Введите номер комнаты")
     await states.room_nb.set()
+
+
+# @dp.message_handler(commands=['stat_room'], state='*')
+# async def commad_stat_room(message: types.Message, state: FSMContext):
+#     await message.answer("Введите номер комнаты")
+#     await states.room_nb.set()
 
 
 @dp.message_handler(state='room_nb')
@@ -516,14 +641,14 @@ async def comand_reg(callback_query: types.CallbackQuery, state: FSMContext):
     else:
         await bot.send_message(callback_query.from_user.id, "В аккаунт выполнен вход.\nВаш никнейм: {reg['nickname']}")
 
-@dp.message_handler(commands=['reg'], state='*')
-async def comand_reg(message: types.Message, state: FSMContext):
-    reg = await state.get_data()
-    if not reg:
-        await message.answer("Для регистрации введите свое имя")
-        await states.name.set()
-    else:
-        await message.answer(f"В аккаунт выполнен вход.\nВаш никнейм: {reg['nickname']}")
+# @dp.message_handler(commands=['reg'], state='*')
+# async def comand_reg(message: types.Message, state: FSMContext):
+#     reg = await state.get_data()
+#     if not reg:
+#         await message.answer("Для регистрации введите свое имя")
+#         await states.name.set()
+#     else:
+#         await message.answer(f"В аккаунт выполнен вход.\nВаш никнейм: {reg['nickname']}")
 
 
 @dp.message_handler(state=states.name)
@@ -635,13 +760,13 @@ async def comand_auht_1(callback_query: types.CallbackQuery, state: FSMContext):
     else:
         await bot.send_message(callback_query.from_user.id, f"В аккаунт выполнин вход\nВаш никнейм: {reg['nickname']}")
 
-@dp.message_handler(commands=['auth'], state='*')
-async def comand_auht_1(message: types.Message, state: FSMContext):
-    if not reg:
-        await message.answer("Для аунтофикации введдите свой никнейм")
-        await states.nickname2.set()
-    else:
-        await message.answer(f"В аккаунт выполнин вход\nВаш никнейм: {reg['nickname']}")
+# @dp.message_handler(commands=['auth'], state='*')
+# async def comand_auht_1(message: types.Message, state: FSMContext):
+#     if not reg:
+#         await message.answer("Для аунтофикации введдите свой никнейм")
+#         await states.nickname2.set()
+#     else:
+#         await message.answer(f"В аккаунт выполнин вход\nВаш никнейм: {reg['nickname']}")
 
 
 @dp.message_handler(state=states.nickname2)

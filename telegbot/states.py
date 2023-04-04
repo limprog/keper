@@ -38,3 +38,5 @@ class States(StatesGroup):
     stat_id = State()
     id = State()
     roon_rb = State()
+    decod = State()
+    debug = State()
